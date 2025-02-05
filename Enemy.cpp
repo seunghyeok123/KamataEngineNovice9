@@ -10,21 +10,22 @@ Enemy::Enemy(int posX, int posY, int speed)
 	posY_ = posY;
 	speed_ = speed;
 	radius_ = 16;
-	isAlive_ = true;
+}
+
+Enemy::~Enemy()
+{
+	enemyCount--;
 }
 
 void Enemy::Update() {
-	if (isAlive_) {
-		posX_ += speed_;
 
-		if (posX_ - radius_ <= 0 || posX_ + radius_ >= 1280) {
-			speed_ *= -1;
-		}
+	posX_ += speed_;
+
+	if (posX_ - radius_ <= 0 || posX_ + radius_ >= 1280) {
+		speed_ *= -1;
 	}
 }
 
 void Enemy::Draw() {
-	if (isAlive_) {
-		Novice::DrawEllipse(posX_, posY_, radius_, radius_, 0.0f, RED, kFillModeSolid);
-	}
+	Novice::DrawEllipse(posX_, posY_, radius_, radius_, 0.0f, RED, kFillModeSolid);
 }

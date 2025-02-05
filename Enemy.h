@@ -12,6 +12,7 @@ public:	// メンバ関数
 	/// <param name="posY">Y座標</param>
 	/// <param name="speed">移動速度</param>
 	Enemy(int posX, int posY, int speed);
+	~Enemy();
 
 	/// <summary>
 	/// 更新

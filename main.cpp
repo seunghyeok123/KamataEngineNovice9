@@ -48,17 +48,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 		Novice::ScreenPrintf(0, 0, "%d", Enemy::enemyCount);
-		enemyA->Update();
-		enemyB->Update();
+		if (enemyA != NULL) {
+			enemyA->Update();
+		}
+		if (enemyB != NULL) {
+			enemyB->Update();
+		}
 		if (Enemy::enemyCount == 1) {
-			Enemy::enemyCount = 0;
-			enemyA->isAlive_ = false;
-			enemyB->isAlive_ = false;
+			if (enemyA != NULL) {
+				delete enemyA;
+				enemyA = nullptr;
+			}
+			if (enemyB != NULL) {
+				delete enemyB;
+				enemyB = nullptr;
+			}
 		}
 		if (!preKeys[DIK_R] && keys[DIK_R]) {
-			if (enemyA) { delete enemyA; enemyA = nullptr; }
 			enemyA = new Enemy(100, 200, 8);
-			if (enemyB) { delete enemyB; enemyB = nullptr; }
 			enemyB = new Enemy(100, 400, 6);
 			Enemy::enemyCount = 2;
 			for (int i = 0; i < 10; i++) {
@@ -100,26 +107,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < 10; i++) {
 			if (Bullet[i].isAlive_) {
-				int distAX = enemyA->posX_ - Bullet[i].posX_;
-				int distAY = enemyA->posY_ - Bullet[i].posY_;
-				int distBX = enemyB->posX_ - Bullet[i].posX_;
-				int distBY = enemyB->posY_ - Bullet[i].posY_;
-				int distA = (distAX * distAX) + (distAY * distAY);
-				int distB = (distBX * distBX) + (distBY * distBY);
-				int radiusA = enemyA->radius_ + Bullet[i].radius_;
-				int radiusB = enemyB->radius_ + Bullet[i].radius_;
-				if (distA <= radiusA * radiusA) {
-					if (enemyA->isAlive_) {
-						enemyA->isAlive_ = false;
+				if (enemyA != nullptr) {
+					int distAX = enemyA->posX_ - Bullet[i].posX_;
+					int distAY = enemyA->posY_ - Bullet[i].posY_;
+					int distA = (distAX * distAX) + (distAY * distAY);
+					int radiusA = enemyA->radius_ + Bullet[i].radius_;
+					if (distA <= radiusA * radiusA) {
+						if (enemyA != NULL) {
+							delete enemyA;
+							enemyA = nullptr;
+						}
 						Bullet[i].isAlive_ = false;
-						Enemy::enemyCount--;
 					}
 				}
-				if (distB <= radiusB * radiusB) {
-					if (enemyB->isAlive_) {
-						enemyB->isAlive_ = false;
+				if (enemyB != nullptr) {
+					int distBX = enemyB->posX_ - Bullet[i].posX_;
+					int distBY = enemyB->posY_ - Bullet[i].posY_;
+					int distB = (distBX * distBX) + (distBY * distBY);
+					int radiusB = enemyB->radius_ + Bullet[i].radius_;
+					if (distB <= radiusB * radiusB) {
+						if (enemyB != NULL) {
+							delete enemyB;
+							enemyB = nullptr;
+						}
 						Bullet[i].isAlive_ = false;
-						Enemy::enemyCount--;
 					}
 				}
 			}
@@ -133,8 +144,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		enemyA->Draw();
-		enemyB->Draw();
+		if (enemyA != nullptr) {
+			enemyA->Draw();
+		}
+		if (enemyB != nullptr) {
+			enemyB->Draw();
+		}
 
 		for (int i = 0; i < 10; i++) {
 			if (Bullet[i].isAlive_) {
