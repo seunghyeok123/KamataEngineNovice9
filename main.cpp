@@ -47,27 +47,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-		Novice::ScreenPrintf(0, 0, "%d", Enemy::enemyCount);
 		if (enemyA != NULL) {
 			enemyA->Update();
 		}
 		if (enemyB != NULL) {
 			enemyB->Update();
 		}
-		if (Enemy::enemyCount == 1) {
-			if (enemyA != NULL) {
-				delete enemyA;
-				enemyA = nullptr;
-			}
-			if (enemyB != NULL) {
-				delete enemyB;
-				enemyB = nullptr;
-			}
-		}
+
 		if (!preKeys[DIK_R] && keys[DIK_R]) {
-			enemyA = new Enemy(100, 200, 8);
-			enemyB = new Enemy(100, 400, 6);
-			Enemy::enemyCount = 2;
+			Enemy::isAlive = true;
 			for (int i = 0; i < 10; i++) {
 				if (Bullet[i].isAlive_) {
 					Bullet[i].isAlive_ = false;
@@ -105,32 +93,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
-		for (int i = 0; i < 10; i++) {
-			if (Bullet[i].isAlive_) {
-				if (enemyA != nullptr) {
-					int distAX = enemyA->posX_ - Bullet[i].posX_;
-					int distAY = enemyA->posY_ - Bullet[i].posY_;
-					int distA = (distAX * distAX) + (distAY * distAY);
-					int radiusA = enemyA->radius_ + Bullet[i].radius_;
-					if (distA <= radiusA * radiusA) {
-						if (enemyA != NULL) {
-							delete enemyA;
-							enemyA = nullptr;
+		if (Enemy::isAlive == true) {
+			for (int i = 0; i < 10; i++) {
+				if (Bullet[i].isAlive_) {
+					if (enemyA != nullptr) {
+						int distAX = enemyA->posX_ - Bullet[i].posX_;
+						int distAY = enemyA->posY_ - Bullet[i].posY_;
+						int distA = (distAX * distAX) + (distAY * distAY);
+						int radiusA = enemyA->radius_ + Bullet[i].radius_;
+						if (distA <= radiusA * radiusA) {
+							Enemy::isAlive = false;
+							Bullet[i].isAlive_ = false;
 						}
-						Bullet[i].isAlive_ = false;
 					}
-				}
-				if (enemyB != nullptr) {
-					int distBX = enemyB->posX_ - Bullet[i].posX_;
-					int distBY = enemyB->posY_ - Bullet[i].posY_;
-					int distB = (distBX * distBX) + (distBY * distBY);
-					int radiusB = enemyB->radius_ + Bullet[i].radius_;
-					if (distB <= radiusB * radiusB) {
-						if (enemyB != NULL) {
-							delete enemyB;
-							enemyB = nullptr;
+					if (enemyB != nullptr) {
+						int distBX = enemyB->posX_ - Bullet[i].posX_;
+						int distBY = enemyB->posY_ - Bullet[i].posY_;
+						int distB = (distBX * distBX) + (distBY * distBY);
+						int radiusB = enemyB->radius_ + Bullet[i].radius_;
+						if (distB <= radiusB * radiusB) {
+							Enemy::isAlive = false;
+							Bullet[i].isAlive_ = false;
 						}
-						Bullet[i].isAlive_ = false;
 					}
 				}
 			}

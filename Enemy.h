@@ -3,7 +3,7 @@
 class Enemy : public Object
 {
 public:	// メンバ関数
-	static int enemyCount;
+	static bool isAlive;
 
 	/// <summary>
 	/// コンストラクタ
